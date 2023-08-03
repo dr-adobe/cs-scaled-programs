@@ -17,6 +17,9 @@ export default function decorate(block) {
   // block.append(ul);
 
   /* This is just a test */
+  [...block.children].forEach((row) => {
+    console.log(row);
+  })
   const spCard = document.createElement('sp-card');
   spCard.setAttribute("size", "s");
   spCard.setAttribute("horizontal", "");
