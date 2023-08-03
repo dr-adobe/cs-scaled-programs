@@ -1,55 +1,35 @@
-import { createOptimizedPicture } from '../../scripts/lib-franklin.js';
+import { buildElement, buildSvg, readPropsAndClear } from '../../scripts/utilities.js';
 
 export default function decorate(block) {
-  /* change to ul, li */
-  // const ul = document.createElement('ul');
-  // [...block.children].forEach((row) => {
-  //   const li = document.createElement('li');
-  //   li.innerHTML = row.innerHTML;
-  //   [...li.children].forEach((div) => {
-  //     if (div.children.length === 1 && div.querySelector('picture')) div.className = 'cards-card-image';
-  //     else div.className = 'cards-card-body';
-  //   });
-  //   ul.append(li);
-  // });
-  // ul.querySelectorAll('img').forEach((img) => img.closest('picture').replaceWith(createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }])));
-  // block.textContent = '';
-  // block.append(ul);
+ 
+  let props = readPropsAndClear(block);
 
-  /* This is just a test */
-  
-  [...block.children].forEach((row) => {
-    console.log(row);
-  })
-  block.textContent = '';
+  // Don't use 'express' theme; stick with 'light' or 'dark'
+  let spTheme = buildElement('sp-theme', [
+    ["color", "light"],
+    ["theme", "light"],
+    ["scale", "large"]
+  ]);
 
-  const spCard = document.createElement('sp-card');
-  spCard.setAttribute("size", "s");
-  spCard.setAttribute("horizontal", "");
-  spCard.setAttribute("heading", "Test Heading");
-  spCard.setAttribute("subheading", "Sub Heading");
+  let spContainer = buildElement('div', [
+    ['style', 'color: var(--spectrum-neutral-content-color-default); margin: 0.5em']
+  ], spTheme);
 
-  const spIcon = document.createElement("sp-icon");
-  spIcon.setAttribute("slot", "preview");
-  spIcon.setAttribute("style", "width: 36px; height: 36px");
+  // TODO: Figure out all logic to determine card type
+  let spCard = buildElement('sp-card', [
+    ["size", "s"],
+    ["horizontal", ""],
+    ["heading", `${props.heading || ''}`],
+    ["subheading", `${props.subheading || ''}`]
+  ], spContainer)
 
-  const svg = document.createElement("svg");
-  svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-  svg.setAttribute("viewBox", "0 0 36 36");
-  svg.setAttribute("aria-hidden", "true");
-  svg.setAttribute("role", "img");
-  svg.setAttribute("fill", "currentColor");
+  let spIcon = buildElement('sp-icon', [
+    ["slot", "preview"],
+    ["style", "width: 36px; height: 36px"]
+  ], spCard);
 
-  const pathOne = document.createElement("path");
-  pathOne.setAttribute("d", "M20 2v10h10L20 2z");
-  
-  const pathTwo = document.createElement("path");
-  pathTwo.setAttribute("d", "M19 14a1 1 0 01-1-1V2H7a1 1 0 00-1 1v30a1 1 0 001 1h22a1 1 0 001-1V14zm7 15.5a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5v-1a.5.5 0 01.5-.5h15a.5.5 0 01.5.5zm0-4a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5v-1a.5.5 0 01.5-.5h15a.5.5 0 01.5.5zm0-4a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5v-1a.5.5 0 01.5-.5h15a.5.5 0 01.5.5z");
+  spIcon.appendChild(buildSvg(props.icon));
 
-  svg.appendChild(pathOne);
-  svg.appendChild(pathTwo);
-  spIcon.appendChild(svg);
-  spCard.appendChild(spIcon);
-
-  block.append(spCard);
+  block.append(spTheme);
 }
+

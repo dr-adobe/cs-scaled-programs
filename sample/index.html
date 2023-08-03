@@ -1,0 +1,110 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <script src="/scripts/lib-franklin.js" type="module"></script>
+        <script src="/scripts/scripts.js" type="module"></script>
+        <link rel="stylesheet" href="/styles/styles.css"/>
+        <link rel="icon" href="data:,"> -->
+    <script src="https://jspm.dev/@spectrum-web-components/bundle/elements.js" type="module" async></script>
+</head>
+
+<body>
+    <sp-theme scale="large" color="dark">
+        <!-- Insert content requiring theme application here. -->
+        <sp-button onclick="alert('I was clicked');">Click me!</sp-button>
+        <!-- End content requiring theme application. -->
+        <div style="color: var(--spectrum-neutral-content-color-default);"> 
+            <sp-card 
+                size="s" 
+                horizontal
+                heading="Card Heading" 
+                subheading="JPG Photo"> 
+                <sp-icon 
+                    slot="preview"
+                    style="width: 36px; height: 36px;"> 
+                        <svg 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            viewBox="0 0 36 36"
+                            aria-hidden="true" 
+                            role="img" 
+                            fill="currentColor">
+                            <path d="M20 2v10h10L20 2z" />
+                            <path
+                                d="M19 14a1 1 0 01-1-1V2H7a1 1 0 00-1 1v30a1 1 0 001 1h22a1 1 0 001-1V14zm7 15.5a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5v-1a.5.5 0 01.5-.5h15a.5.5 0 01.5.5zm0-4a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5v-1a.5.5 0 01.5-.5h15a.5.5 0 01.5.5zm0-4a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5v-1a.5.5 0 01.5-.5h15a.5.5 0 01.5.5z" />
+                        </svg> 
+                </sp-icon> 
+            </sp-card>
+        </div>
+    </sp-theme>
+    <script>
+
+        const buildElement = (element, attributes, parent) => {
+            
+            let el;
+
+            if (element === "svg" || element === "path") {
+                el = document.createElementNS("http://www.w3.org/2000/svg", element);
+            } else {
+                el = document.createElement(element);
+            }
+
+            // Attributes should come in as array of arrays [[k, v],[k, v]]
+            for (let attribute of attributes) {
+                console.log(attribute);
+                if (Array.isArray(attribute)) {
+                    el.setAttribute(attribute[0], attribute[1]);
+                }
+            }
+
+            // Parent can be provided, or direct append with return can be used
+            if (parent) {
+                parent.appendChild(el);
+            }
+
+            return el;
+        }
+
+        let spTheme = buildElement('sp-theme', [
+            ["color", "light"],
+            ["theme", "light"],
+            ["scale", "large"]
+        ]);
+
+        let spContainer = buildElement('div', [
+            ['style', 'color: var(--spectrum-neutral-content-color-default);']
+        ], spTheme);
+
+        let spCard = buildElement('sp-card', [
+            ["size", "s"],
+            ["horizontal", ""],
+            ["heading", "Test "],
+            ["subheading", "??"]
+        ], spContainer)
+
+        let spIcon = buildElement('sp-icon', [
+            ["slot", "preview"],
+            ["style", "width: 36px; height: 36px"]
+        ], spCard);
+
+        let svg = buildElement('svg', [
+            ["xmlns", "http://www.w3.org/2000/svg"],
+            ["viewBox", "0 0 36 36"],
+            ["aria-hidden", "true"],
+            ["role", "img"],
+            ["fill", "currentColor"]
+        ], spIcon);
+
+        buildElement('path', [
+            ["d", "M20 2v10h10L20 2z"]
+        ], svg);
+
+        buildElement('path', [
+            ["d", "M19 14a1 1 0 01-1-1V2H7a1 1 0 00-1 1v30a1 1 0 001 1h22a1 1 0 001-1V14zm7 15.5a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5v-1a.5.5 0 01.5-.5h15a.5.5 0 01.5.5zm0-4a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5v-1a.5.5 0 01.5-.5h15a.5.5 0 01.5.5zm0-4a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5v-1a.5.5 0 01.5-.5h15a.5.5 0 01.5.5z"]
+        ], svg);
+
+        document.getElementsByTagName("sp-theme")[0].append(spContainer);
+    </script>
+</body>
+
+</html>
